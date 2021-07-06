@@ -1,7 +1,7 @@
 package com.online.shop.ecommerceshop.security.config;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 import static java.util.Collections.singletonList;
 
-@Component
+@Configuration
 public class CorsConfiguration {
 
     @Bean
