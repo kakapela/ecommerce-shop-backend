@@ -1,8 +1,10 @@
 package com.online.shop.ecommerceshop.controller;
 
 import com.online.shop.ecommerceshop.dto.*;
+import com.online.shop.ecommerceshop.exception.domain.EmailExistException;
 import com.online.shop.ecommerceshop.exception.domain.InvalidRefreshTokenException;
 import com.online.shop.ecommerceshop.exception.domain.UserNotFoundException;
+import com.online.shop.ecommerceshop.exception.domain.UsernameExistException;
 import com.online.shop.ecommerceshop.service.AuthenticationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +28,12 @@ public class AuthenticationController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<String> signup(@RequestBody RegisterRequest registerRequest) throws UserNotFoundException, UsernameExistException, EmailExistException {
         authenticationService.signup(registerRequest);
         return new ResponseEntity<>("User registration successful", OK);
     }
+    //TODO - HIBERNATE VALIDATION
+
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest loginRequest) {

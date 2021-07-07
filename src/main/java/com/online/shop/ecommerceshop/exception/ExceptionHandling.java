@@ -24,6 +24,7 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 public class ExceptionHandling {
 
     public static final String NO_USER_FOUND_BY_ID = "No user found by id: ";
+    public static final String USER_WAS_NOT_FOUND = "User was not found!";
     public static final String ID_TOO_LONG = "Given ID: %s is too long!";
     public static final String NO_MAPPING = "There is no mapping for this URL.";
     private static final String METHOD_IS_NOT_ALLOWED = "This request method is not allowed on this endpoint. Please send a '%s' request or other.";
@@ -40,6 +41,18 @@ public class ExceptionHandling {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<HttpResponse> userNotFoundException(UserNotFoundException exception) {
+        log.error(exception.getMessage());
+        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler(UsernameExistException.class)
+    public ResponseEntity<HttpResponse> usernameExistException(UsernameExistException exception) {
+        log.error(exception.getMessage());
+        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler(EmailExistException.class)
+    public ResponseEntity<HttpResponse> emailExistException(EmailExistException exception) {
         log.error(exception.getMessage());
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }

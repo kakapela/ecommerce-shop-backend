@@ -4,8 +4,10 @@ import com.online.shop.ecommerceshop.domain.RefreshToken;
 import com.online.shop.ecommerceshop.domain.User;
 import com.online.shop.ecommerceshop.domain.UserPrincipal;
 import com.online.shop.ecommerceshop.dto.*;
+import com.online.shop.ecommerceshop.exception.domain.EmailExistException;
 import com.online.shop.ecommerceshop.exception.domain.InvalidRefreshTokenException;
 import com.online.shop.ecommerceshop.exception.domain.UserNotFoundException;
+import com.online.shop.ecommerceshop.exception.domain.UsernameExistException;
 import com.online.shop.ecommerceshop.repository.UserRepository;
 import com.online.shop.ecommerceshop.security.jwt.JwtTokenProvider;
 import com.online.shop.ecommerceshop.service.AuthenticationService;
@@ -13,7 +15,6 @@ import com.online.shop.ecommerceshop.service.RefreshTokenService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,9 +23,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.Optional;
 
 import static com.online.shop.ecommerceshop.enumeration.Role.ROLE_USER;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
 @AllArgsConstructor
@@ -39,7 +40,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     @Transactional
-    public void signup(RegisterRequest registerRequest) {
+    public void signup(RegisterRequest registerRequest) throws UserNotFoundException, UsernameExistException, EmailExistException {
+
+        validateUsernameAndEmail(registerRequest.getUsername(), registerRequest.getEmail());
+
         User user = new User();
         user.setUserId(generateUserId());
         user.setUsername(registerRequest.getUsername());
@@ -56,6 +60,29 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         log.info("New user was added!");
 
 
+    }
+
+    @Override
+    public User findUserByUsername(String username) {
+        return userRepository.findUserByUsername(username);
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        return userRepository.findUserByEmail(email);
+    }
+
+    private void validateUsernameAndEmail(String username, String email) throws UserNotFoundException, UsernameExistException, EmailExistException {
+
+            User userByUsername = findUserByUsername(username);
+            User userByEmail = findUserByEmail(email);
+
+            if(isBlank(username) || isBlank(email))
+                throw new UserNotFoundException();
+            if(userByUsername != null && userByUsername.getUsername().equals(username) )
+                throw new UsernameExistException();
+            if(userByEmail != null && userByEmail.getEmail().equals(email))
+                throw new EmailExistException();
     }
 
     private String generateUserId() {
