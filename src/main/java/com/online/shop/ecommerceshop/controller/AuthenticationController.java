@@ -1,5 +1,6 @@
 package com.online.shop.ecommerceshop.controller;
 
+import com.online.shop.ecommerceshop.domain.HttpResponse;
 import com.online.shop.ecommerceshop.dto.*;
 import com.online.shop.ecommerceshop.exception.domain.EmailExistException;
 import com.online.shop.ecommerceshop.exception.domain.InvalidRefreshTokenException;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+import static com.online.shop.ecommerceshop.constant.UserImplConstant.LOGOUT_SUCCESSFUL;
+import static com.online.shop.ecommerceshop.constant.UserImplConstant.USER_REGISTRATION_SUCCESSFUL;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -28,9 +31,9 @@ public class AuthenticationController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody RegisterRequest registerRequest) throws UserNotFoundException, UsernameExistException, EmailExistException {
+    public ResponseEntity<HttpResponse> signup(@RequestBody RegisterRequest registerRequest) throws UserNotFoundException, UsernameExistException, EmailExistException {
         authenticationService.signup(registerRequest);
-        return new ResponseEntity<>("User registration successful", OK);
+        return new ResponseEntity<>(new HttpResponse(OK.value(), OK, OK.getReasonPhrase(), USER_REGISTRATION_SUCCESSFUL), OK);
     }
     //TODO - HIBERNATE VALIDATION
 
@@ -47,9 +50,9 @@ public class AuthenticationController {
 
     @PostMapping("/logout")
     @PreAuthorize("#logOutRequest.username == authentication.principal")
-    public ResponseEntity<String> logoutUser(@Valid @RequestBody LogOutRequest logOutRequest) throws UserNotFoundException {
+    public ResponseEntity<HttpResponse> logoutUser(@Valid @RequestBody LogOutRequest logOutRequest) throws UserNotFoundException {
         authenticationService.logout(logOutRequest.getUsername());
-        return  ResponseEntity.ok("Log out successful!");
+        return new ResponseEntity<>(new HttpResponse(OK.value(), OK, OK.getReasonPhrase(), LOGOUT_SUCCESSFUL), OK);
     }
 
 
