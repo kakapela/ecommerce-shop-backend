@@ -18,5 +18,5 @@ public interface AuthenticationService {
 
     User findUserByUsername(String username);
 
-    void logout(String refreshToken) throws UserNotFoundException, InvalidRefreshTokenException;
+    void logout(String refreshToken) throws UserNotFoundException;
 }

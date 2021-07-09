@@ -4,11 +4,10 @@ public class SecurityConstant {
     public static final long EXPIRATION_TIME = 60_000; // 1 minutes only
 
 //    public static final long REFRESH_TOKEN_EXPIRATION_TIME = 1_800_000; // 30 minutes
-    public static final long REFRESH_TOKEN_EXPIRATION_TIME = 180_000_000; // 30 minutes
+    public static final long REFRESH_TOKEN_EXPIRATION_TIME = 300_000; // 30 minutes
 
     public static final String TOKEN_PREFIX = "Bearer ";
-    public static final String JWT_TOKEN_HEADER = "Jwt-Token";
-    public static final String TOKEN_ISSUER="Banana Company";
+    public static final String TOKEN_ISSUER="Dafashion Company";
     public static final String TOKEN_AUDIENCE="Ecommerce shop";
     public static final String AUTHORITIES = "authorities";
     public static final String TOKEN_CANNOT_BE_VERIFIED = "Token cannot be verified";

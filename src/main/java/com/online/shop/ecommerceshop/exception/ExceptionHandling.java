@@ -68,7 +68,7 @@ public class ExceptionHandling {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<HttpResponse> methodArgumentNotValidException(MethodArgumentNotValidException exception) {
         log.error(exception.getMessage());
-        return createHttpResponse(FORBIDDEN, requireNonNull(exception.getFieldError()).getDefaultMessage());
+        return createHttpResponse(BAD_REQUEST, requireNonNull(exception.getFieldError()).getDefaultMessage());
     }
 
     @ExceptionHandler(RefreshTokenExpiredException.class)

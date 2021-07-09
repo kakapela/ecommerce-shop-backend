@@ -9,7 +9,6 @@ import com.online.shop.ecommerceshop.exception.domain.UsernameExistException;
 import com.online.shop.ecommerceshop.service.AuthenticationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +35,7 @@ public class AuthenticationController {
         return new ResponseEntity<>(new HttpResponse(OK.value(), OK, OK.getReasonPhrase(), USER_REGISTRATION_SUCCESSFUL), OK);
     }
     //TODO - HIBERNATE VALIDATION
+    //todo - zmienic exceptiony na polskie opisy
 
 
     @PostMapping("/login")
@@ -49,7 +49,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<HttpResponse> logoutUser(@Valid @RequestBody LogOutRequest logOutRequest) throws UserNotFoundException, InvalidRefreshTokenException {
+    public ResponseEntity<HttpResponse> logoutUser(@Valid @RequestBody LogOutRequest logOutRequest) throws UserNotFoundException {
         authenticationService.logout(logOutRequest.getRefreshToken());
         return new ResponseEntity<>(new HttpResponse(OK.value(), OK, OK.getReasonPhrase(), LOGOUT_SUCCESSFUL), OK);
     }

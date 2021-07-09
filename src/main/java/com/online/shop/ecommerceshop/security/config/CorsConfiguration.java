@@ -26,20 +26,5 @@ public class CorsConfiguration {
         corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(urlBasedCorsConfigurationSource);
-
-//		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//		CorsConfiguration config = new CorsConfiguration();
-//		//config.setAllowCredentials(true); // you USUALLY want this
-//		config.addAllowedOrigin("*");
-//		config.addAllowedHeader("*");
-//		config.addAllowedMethod("OPTIONS");
-//		config.addAllowedMethod("HEAD");
-//		config.addAllowedMethod("GET");
-//		config.addAllowedMethod("PUT");
-//		config.addAllowedMethod("POST");
-//		config.addAllowedMethod("DELETE");
-//		config.addAllowedMethod("PATCH");
-//		source.registerCorsConfiguration("/**", config);
-//		return new CorsFilter(source);
     }
 }

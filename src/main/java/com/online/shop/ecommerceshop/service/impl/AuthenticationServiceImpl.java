@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.Optional;
 
 import static com.online.shop.ecommerceshop.enumeration.Role.ROLE_USER;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -131,10 +132,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public void logout(String refreshToken) throws UserNotFoundException, InvalidRefreshTokenException {
-        RefreshToken token = refreshTokenService.findByToken(refreshToken).orElseThrow(InvalidRefreshTokenException::new);
-        //during logout we remove all refresh tokens
-        refreshTokenService.deleteByUserId(token.getUser().getId());
+    public void logout(String refreshToken) throws UserNotFoundException {
+        Optional<RefreshToken> token = refreshTokenService.findByToken(refreshToken);
+        if(token.isPresent()) {
+            //during logout we remove all refresh tokens
+            refreshTokenService.deleteByUserId(token.get().getUser().getId());
+        }
     }
 
     private Authentication authenticate(String username, String password) {

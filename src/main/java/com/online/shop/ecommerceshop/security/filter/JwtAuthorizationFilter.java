@@ -42,6 +42,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
             String token = authorizationHeader.substring(TOKEN_PREFIX.length());
             String username = jwtTokenProvider.getSubject(token);
+            //todo - zabezpieczyc przed wyjatkiem token was expired?
 
             if (jwtTokenProvider.isTokenValid(username, token)) {
                 List<GrantedAuthority> authorities = jwtTokenProvider.getAuthorities(token);
