@@ -6,6 +6,6 @@ public class UserImplConstant {
     public static final String NO_USER_FOUND_BY_USERNAME = "No user found by username: ";
     public static final String FOUND_USER_BY_USERNAME = "Returning found user by username: ";
     public static final String USER_REGISTRATION_SUCCESSFUL = "User registration successful";
-    public static final String LOGOUT_SUCCESSFUL = "User registration successful";
+    public static final String LOGOUT_SUCCESSFUL = "User logout successful";
 
 }

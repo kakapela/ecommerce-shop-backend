@@ -12,11 +12,11 @@ public interface AuthenticationService {
 
     AuthenticationResponse login(LoginRequest loginRequest);
 
-    TokenRefreshResponse refreshToken(TokenRefreshRequest request) throws InvalidRefreshTokenException;
+    AuthenticationResponse refreshToken(TokenRefreshRequest request) throws InvalidRefreshTokenException;
 
     User findUserByEmail(String email);
 
     User findUserByUsername(String username);
 
-    void logout(String username) throws UserNotFoundException;
+    void logout(String refreshToken) throws UserNotFoundException, InvalidRefreshTokenException;
 }

@@ -74,15 +74,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private void validateUsernameAndEmail(String username, String email) throws UserNotFoundException, UsernameExistException, EmailExistException {
 
-            User userByUsername = findUserByUsername(username);
-            User userByEmail = findUserByEmail(email);
+        User userByUsername = findUserByUsername(username);
+        User userByEmail = findUserByEmail(email);
 
-            if(isBlank(username) || isBlank(email))
-                throw new UserNotFoundException();
-            if(userByUsername != null && userByUsername.getUsername().equals(username) )
-                throw new UsernameExistException();
-            if(userByEmail != null && userByEmail.getEmail().equals(email))
-                throw new EmailExistException();
+        if (isBlank(username) || isBlank(email))
+            throw new UserNotFoundException();
+        if (userByUsername != null && userByUsername.getUsername().equals(username))
+            throw new UsernameExistException();
+        if (userByEmail != null && userByEmail.getEmail().equals(email))
+            throw new EmailExistException();
     }
 
     private String generateUserId() {
@@ -92,25 +92,25 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @Transactional
     public AuthenticationResponse login(LoginRequest loginRequest) {
-       Authentication authentication =  authenticate(loginRequest.getUsername(), loginRequest.getPassword());
+        Authentication authentication = authenticate(loginRequest.getUsername(), loginRequest.getPassword());
 
-      UserPrincipal userPrincipal =  (UserPrincipal) authentication.getPrincipal();
-      User user = userPrincipal.getUser();
-      user.setLastLoginDate(new Date());
-      userRepository.save(user);
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        User user = userPrincipal.getUser();
+        user.setLastLoginDate(new Date());
+        userRepository.save(user);
 
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
         String token = jwtTokenProvider.generateJwtToken(userPrincipal);
 
-      return AuthenticationResponse.builder()
-              .authenticationToken(token)
-              .username(userPrincipal.getUsername())
-              .refreshToken(refreshToken.getToken())
-              .build();
+        return AuthenticationResponse.builder()
+                .authenticationToken(token)
+                .username(userPrincipal.getUsername())
+                .refreshToken(refreshToken.getToken())
+                .build();
     }
 
     @Override
-    public TokenRefreshResponse refreshToken(TokenRefreshRequest request) throws InvalidRefreshTokenException {
+    public AuthenticationResponse refreshToken(TokenRefreshRequest request) throws InvalidRefreshTokenException {
         String requestRefreshToken = request.getRefreshToken();
 
         RefreshToken refreshToken = refreshTokenService
@@ -122,17 +122,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (!refreshTokenValid)
             throw new InvalidRefreshTokenException();
 
-        return new TokenRefreshResponse(
+        return new AuthenticationResponse(
                 jwtTokenProvider.generateJwtToken(new UserPrincipal(refreshToken.getUser())),
+                refreshToken.getUser().getUsername(),
                 refreshTokenService.createRefreshToken(refreshToken.getUser().getId()).getToken()
         );
 
     }
+
     @Override
-    public void logout(String username) throws UserNotFoundException {
-        User user = userRepository.findUserByUsername(username);
+    public void logout(String refreshToken) throws UserNotFoundException, InvalidRefreshTokenException {
+        RefreshToken token = refreshTokenService.findByToken(refreshToken).orElseThrow(InvalidRefreshTokenException::new);
         //during logout we remove all refresh tokens
-         refreshTokenService.deleteByUserId(user.getId());
+        refreshTokenService.deleteByUserId(token.getUser().getId());
     }
 
     private Authentication authenticate(String username, String password) {

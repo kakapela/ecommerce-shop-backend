@@ -11,11 +11,13 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Objects;
 
+import static java.util.Objects.requireNonNull;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -60,7 +62,13 @@ public class ExceptionHandling {
     @ExceptionHandler(InvalidRefreshTokenException.class)
     public ResponseEntity<HttpResponse> invalidRefreshTokenException(InvalidRefreshTokenException exception) {
         log.error(exception.getMessage());
-        return createHttpResponse(UNAUTHORIZED, exception.getMessage());
+        return createHttpResponse(FORBIDDEN, exception.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<HttpResponse> methodArgumentNotValidException(MethodArgumentNotValidException exception) {
+        log.error(exception.getMessage());
+        return createHttpResponse(FORBIDDEN, requireNonNull(exception.getFieldError()).getDefaultMessage());
     }
 
     @ExceptionHandler(RefreshTokenExpiredException.class)
@@ -104,7 +112,7 @@ public class ExceptionHandling {
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<HttpResponse> methodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
-        HttpMethod supportedMethod = Objects.requireNonNull(exception.getSupportedHttpMethods()).iterator().next();
+        HttpMethod supportedMethod = requireNonNull(exception.getSupportedHttpMethods()).iterator().next();
         return createHttpResponse(METHOD_NOT_ALLOWED, String.format(METHOD_IS_NOT_ALLOWED, supportedMethod));
     }
 
@@ -114,6 +122,7 @@ public class ExceptionHandling {
         exception.getCause().printStackTrace();
         return createHttpResponse(INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR_MSG);
     }
+
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<HttpResponse> internalServerErrorException(RuntimeException exception) {

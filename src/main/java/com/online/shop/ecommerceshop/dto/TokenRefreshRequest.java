@@ -7,6 +7,6 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class TokenRefreshRequest {
 
-    @NotBlank
+    @NotBlank(message = "Refresh Token cannot be empty!")
     private String refreshToken;
 }

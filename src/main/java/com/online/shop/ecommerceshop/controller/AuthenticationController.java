@@ -44,14 +44,13 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refreshtoken")
-    public ResponseEntity<TokenRefreshResponse> refreshtoken(@Valid @RequestBody TokenRefreshRequest request) throws InvalidRefreshTokenException {
+    public ResponseEntity<AuthenticationResponse> refreshtoken(@Valid @RequestBody TokenRefreshRequest request) throws InvalidRefreshTokenException {
         return ok(authenticationService.refreshToken(request));
     }
 
     @PostMapping("/logout")
-    @PreAuthorize("#logOutRequest.username == authentication.principal")
-    public ResponseEntity<HttpResponse> logoutUser(@Valid @RequestBody LogOutRequest logOutRequest) throws UserNotFoundException {
-        authenticationService.logout(logOutRequest.getUsername());
+    public ResponseEntity<HttpResponse> logoutUser(@Valid @RequestBody LogOutRequest logOutRequest) throws UserNotFoundException, InvalidRefreshTokenException {
+        authenticationService.logout(logOutRequest.getRefreshToken());
         return new ResponseEntity<>(new HttpResponse(OK.value(), OK, OK.getReasonPhrase(), LOGOUT_SUCCESSFUL), OK);
     }
 
