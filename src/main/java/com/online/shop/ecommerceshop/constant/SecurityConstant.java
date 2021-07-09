@@ -1,10 +1,8 @@
 package com.online.shop.ecommerceshop.constant;
 
 public class SecurityConstant {
-    public static final long EXPIRATION_TIME = 60_000; // 1 minutes only
-
-//    public static final long REFRESH_TOKEN_EXPIRATION_TIME = 1_800_000; // 30 minutes
-    public static final long REFRESH_TOKEN_EXPIRATION_TIME = 300_000; // 30 minutes
+    public static final long EXPIRATION_TIME = 360_0000; // 1 hour
+    public static final long REFRESH_TOKEN_EXPIRATION_TIME = 86_400_000; // 1 day
 
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String TOKEN_ISSUER="Dafashion Company";
