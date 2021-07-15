@@ -7,7 +7,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -22,21 +24,24 @@ public class Product {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Basic(optional = false)
     private String name;
 
     private BigDecimal price;
 
-    private String pictureUrl;
+    private String currency;
 
-    private Double size;
+    private String description;
 
-    private String category;
+    private String size;
 
     private String color;
 
     private String brand;
 
-    private String description;
+    private String category;
 
+    private String subcategory;
+
+    @OneToMany(mappedBy="product", fetch = LAZY)
+    private List<Picture> pictures;
 }
