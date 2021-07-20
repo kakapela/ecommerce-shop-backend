@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -28,7 +29,7 @@ public class Picture {
         this.url = url;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name="product_id", nullable=true)
     private Product product;
 }

@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.*;
 
 @Entity
@@ -34,10 +35,8 @@ public class Order {
 
     private String status;
 
-
-    @JsonManagedReference
-    @OneToMany(mappedBy = "pk.order")
-    private List<OrderProduct> orderProducts = new ArrayList<>();
+    @OneToMany(mappedBy = "pk.order", fetch = LAZY)
+    private List<OrderProduct> orderProducts;
 
     @Transient
     public BigDecimal getTotalOrderPrice() {

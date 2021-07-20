@@ -4,11 +4,11 @@ import com.online.shop.ecommerceshop.domain.Product;
 import com.online.shop.ecommerceshop.dto.ProductDto;
 import com.online.shop.ecommerceshop.exception.domain.ResourceNotFoundException;
 
+import java.util.List;
+
 public interface ProductService {
 
-    Iterable<Product> getAllProducts();
-
-    Product getProduct(long id) throws ResourceNotFoundException;
+    List<ProductDto> getAllProducts();
 
     ProductDto getProductById(long id) throws ResourceNotFoundException;
 

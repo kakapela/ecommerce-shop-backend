@@ -1,6 +1,5 @@
 package com.online.shop.ecommerceshop.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +17,6 @@ import java.math.BigDecimal;
 public class OrderProduct {
 
     @EmbeddedId
-    @JsonIgnore
     private OrderProductPK pk;
 
     public OrderProduct(Order order, Product product, Integer quantity) {
