@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,15 +30,38 @@ public class EcommerceShopApplication {
 	CommandLineRunner runner(ProductService productService, PictureRepository pictureRepository, OrderRepository orderRepository,
 							 OrderProductRepository orderProductRepository) {
 		return args -> {
-			Picture picture = new Picture(1L, "http://placehold.it/200x100");
+			Picture picture = new Picture(1L,
+					"https://images.pexels.com/photos/914668/pexels-photo-914668.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
 			List<Picture> pictures = new ArrayList<>();
 			pictures.add(picture);
 			pictureRepository.save(picture);
 			Product product = new Product(1L, "Sukienka modowa", new BigDecimal("300.00"), "PLN", "Sukienka na lato 2021", "L", "niebieski", "DaFashion Original Brand Design",
-					"damskie", "koszulki", pictures);
+					"damskie", "koszulki", LocalDateTime.now(), pictures);
+
+
 			productService.save(product);
 			picture.setProduct(product);
 			pictureRepository.save(picture);
+
+			for(int i=2; i<99; i++){
+				Picture mockPicture = new Picture((long)i, "https://images.pexels.com/photos/914668/pexels-photo-914668.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
+
+				List<Picture> picturesMock = new ArrayList<>();
+				pictures.add(mockPicture);
+
+				pictureRepository.save(mockPicture);
+
+
+
+				Product mockProduct = new Product((long) i, "Sukienka modowa", new BigDecimal("300.00"), "PLN", "Sukienka na lato 2021", "L", "niebieski", "DaFashion Original Brand Design",
+						"damskie", "koszulki", LocalDateTime.now(), picturesMock);
+
+				productService.save(mockProduct);
+				mockPicture.setProduct(mockProduct);
+				pictureRepository.save(mockPicture);
+
+
+			}
 
 			Order order = new Order();
 			order.setDateCreated(LocalDate.now());

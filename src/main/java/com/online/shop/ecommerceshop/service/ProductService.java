@@ -2,13 +2,15 @@ package com.online.shop.ecommerceshop.service;
 
 import com.online.shop.ecommerceshop.domain.Product;
 import com.online.shop.ecommerceshop.dto.ProductDto;
+import com.online.shop.ecommerceshop.dto.ProductListDto;
 import com.online.shop.ecommerceshop.exception.domain.ResourceNotFoundException;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface ProductService {
 
-    List<ProductDto> getAllProducts();
+    ProductListDto getProductListPaginated(Pageable pageable);
 
     ProductDto getProductById(long id) throws ResourceNotFoundException;
 

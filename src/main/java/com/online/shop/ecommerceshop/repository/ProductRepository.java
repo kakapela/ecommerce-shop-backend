@@ -1,7 +1,8 @@
 package com.online.shop.ecommerceshop.repository;
 
 import com.online.shop.ecommerceshop.domain.Product;
-import com.online.shop.ecommerceshop.dto.ProductDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -15,7 +16,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p LEFT JOIN FETCH p.pictures WHERE p.id = :id")
     Optional<Product> findByIdAndFetchPictures(Long id);
 
-    @Override
-    @Query("SELECT p FROM Product p LEFT JOIN FETCH p.pictures")
-    List<Product> findAll();
+    @Query(value = "SELECT p FROM Product p LEFT JOIN FETCH p.pictures order by p.createdDate",
+    countQuery = "select count(p) from Product p left join p.pictures"
+    )
+    Page<Product> findAllProductsPaginated(Pageable pageable);
 }

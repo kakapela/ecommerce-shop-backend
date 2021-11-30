@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
@@ -41,6 +42,8 @@ public class Product {
     private String category;
 
     private String subcategory;
+
+    private LocalDateTime createdDate;
 
     @OneToMany(mappedBy="product", fetch = LAZY)
     private List<Picture> pictures;

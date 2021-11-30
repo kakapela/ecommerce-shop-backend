@@ -34,9 +34,6 @@ public class AuthenticationController {
         authenticationService.signup(registerRequest);
         return new ResponseEntity<>(new HttpResponse(OK.value(), OK, OK.getReasonPhrase(), USER_REGISTRATION_SUCCESSFUL), OK);
     }
-    //TODO - HIBERNATE VALIDATION
-    //todo - zmienic exceptiony na polskie opisy
-
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest loginRequest) {
