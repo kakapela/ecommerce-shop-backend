@@ -37,9 +37,14 @@ public class ExceptionHandling {
     public static final String PRODUCT_NOT_FOUND = "Product was not found";
     public static final String REFRESH_TOKEN_EXPIRED = "Refresh token was expired!";
     public static final String REFRESH_TOKEN_IS_INVALID = "Refresh token is invalid!";
+    public static final String PRODUCT_CATEGORY_WAS_NOT_FOUND = "Given product category was not found!";
 
 
-
+    @ExceptionHandler(ProductCategoryNotFoundException.class)
+    public ResponseEntity<HttpResponse> productCategoryNotFoundException(ProductCategoryNotFoundException exception) {
+        log.error(exception.getMessage());
+        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+    }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<HttpResponse> userNotFoundException(UserNotFoundException exception) {

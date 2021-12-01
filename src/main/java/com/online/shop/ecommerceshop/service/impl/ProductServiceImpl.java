@@ -3,6 +3,8 @@ package com.online.shop.ecommerceshop.service.impl;
 import com.online.shop.ecommerceshop.domain.Product;
 import com.online.shop.ecommerceshop.dto.ProductDto;
 import com.online.shop.ecommerceshop.dto.ProductListDto;
+import com.online.shop.ecommerceshop.enumeration.ProductCategory;
+import com.online.shop.ecommerceshop.exception.domain.ProductCategoryNotFoundException;
 import com.online.shop.ecommerceshop.exception.domain.ResourceNotFoundException;
 import com.online.shop.ecommerceshop.mapper.ProductMapper;
 import com.online.shop.ecommerceshop.repository.ProductRepository;
@@ -14,8 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -27,8 +29,22 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public ProductListDto getProductListPaginated(Pageable pageable) {
-        Page<Product> pageProducts = productRepository.findAllProductsPaginated(pageable);
+    public ProductListDto getProductListPaginated(Pageable pageable, String category) throws ProductCategoryNotFoundException {
+
+        Page<Product> pageProducts;
+
+        if (category == null) {
+            pageProducts = productRepository.findAllProductsPaginated(pageable);
+        } else {
+            List<String> productCategories = stream(ProductCategory.values())
+                    .map(ProductCategory::toString)
+                    .collect(toList());
+
+            if (!productCategories.contains(category))
+                throw new ProductCategoryNotFoundException();
+
+            pageProducts = productRepository.findByCategory(category, pageable);
+        }
 
         List<ProductDto> products = pageProducts.getContent()
                 .stream()

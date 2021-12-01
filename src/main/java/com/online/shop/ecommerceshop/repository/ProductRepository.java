@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -17,7 +16,13 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findByIdAndFetchPictures(Long id);
 
     @Query(value = "SELECT p FROM Product p LEFT JOIN FETCH p.pictures order by p.createdDate",
-    countQuery = "select count(p) from Product p left join p.pictures"
+            countQuery = "select count(p) from Product p left join p.pictures"
     )
     Page<Product> findAllProductsPaginated(Pageable pageable);
+
+    @Query(value = "SELECT p FROM Product p LEFT JOIN FETCH p.pictures" +
+            " where p.category = :category order by p.createdDate",
+            countQuery = "select count(p) from Product p left join p.pictures where p.category = :category"
+    )
+    Page<Product> findByCategory(String category, Pageable pageable);
 }

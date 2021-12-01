@@ -36,7 +36,7 @@ public class EcommerceShopApplication {
 			pictures.add(picture);
 			pictureRepository.save(picture);
 			Product product = new Product(1L, "Sukienka modowa", new BigDecimal("300.00"), "PLN", "Sukienka na lato 2021", "L", "niebieski", "DaFashion Original Brand Design",
-					"damskie", "koszulki", LocalDateTime.now(), pictures);
+					"women", "koszulki", LocalDateTime.now(), pictures);
 
 
 			productService.save(product);
@@ -54,11 +54,17 @@ public class EcommerceShopApplication {
 
 
 				Product mockProduct = new Product((long) i, "Sukienka modowa", new BigDecimal("300.00"), "PLN", "Sukienka na lato 2021", "L", "niebieski", "DaFashion Original Brand Design",
-						"damskie", "koszulki", LocalDateTime.now(), picturesMock);
+						"women", "koszulki", LocalDateTime.now(), picturesMock);
 
-				productService.save(mockProduct);
+				if(i<30)
+					mockProduct.setCategory("men");
+				else if (i<60)
+					mockProduct.setCategory("children");
+
+					productService.save(mockProduct);
 				mockPicture.setProduct(mockProduct);
 				pictureRepository.save(mockPicture);
+
 
 
 			}
