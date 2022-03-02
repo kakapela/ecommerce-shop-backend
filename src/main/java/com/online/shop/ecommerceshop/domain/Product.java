@@ -45,6 +45,8 @@ public class Product {
 
     private LocalDateTime createdDate;
 
+    private Integer numberOfReviews;
+
     @OneToMany(mappedBy="product", fetch = LAZY)
     private List<Picture> pictures;
 }

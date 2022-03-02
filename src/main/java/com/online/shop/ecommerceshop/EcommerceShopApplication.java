@@ -36,7 +36,7 @@ public class EcommerceShopApplication {
 			pictures.add(picture);
 			pictureRepository.save(picture);
 			Product product = new Product(1L, "Sukienka modowa", new BigDecimal("300.00"), "PLN", "Sukienka na lato 2021", "L", "niebieski", "DaFashion Original Brand Design",
-					"women", "koszulki", LocalDateTime.now(), pictures);
+					"women", "koszulki", LocalDateTime.now(),9, pictures);
 
 
 			productService.save(product);
@@ -44,17 +44,35 @@ public class EcommerceShopApplication {
 			pictureRepository.save(picture);
 
 			for(int i=2; i<99; i++){
-				Picture mockPicture = new Picture((long)i, "https://images.pexels.com/photos/914668/pexels-photo-914668.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
+				int min = 800;
+				int max = 1000;
+				int random_int = (int)Math.floor(Math.random()*(max-min+1)+min);
+				Picture mockPicture = new Picture((long)i, "https://source.unsplash.com/collection/"+ i );
+				Picture mockPicture2 = new Picture((long)i+100, "https://source.unsplash.com/collection/"+ i );
+				Picture mockPicture3 = new Picture((long)i+101, "https://source.unsplash.com/collection/"+ i );
+				Picture mockPicture4 = new Picture((long)i+102, "https://source.unsplash.com/collection/"+ i );
+				Picture mockPicture5 = new Picture((long)i+103, "https://source.unsplash.com/collection/"+ i );
+				Picture mockPicture6 = new Picture((long)i+104, "https://source.unsplash.com/collection/"+ i );
 
 				List<Picture> picturesMock = new ArrayList<>();
 				pictures.add(mockPicture);
+				pictures.add(mockPicture2);
+				pictures.add(mockPicture3);
+				pictures.add(mockPicture4);
+				pictures.add(mockPicture5);
+				pictures.add(mockPicture6);
 
 				pictureRepository.save(mockPicture);
+				pictureRepository.save(mockPicture2);
+				pictureRepository.save(mockPicture3);
+				pictureRepository.save(mockPicture4);
+				pictureRepository.save(mockPicture5);
+				pictureRepository.save(mockPicture6);
 
 
 
 				Product mockProduct = new Product((long) i, "Sukienka modowa", new BigDecimal("300.00"), "PLN", "Sukienka na lato 2021", "L", "niebieski", "DaFashion Original Brand Design",
-						"women", "koszulki", LocalDateTime.now(), picturesMock);
+						"women", "koszulki", LocalDateTime.now(), random_int,picturesMock);
 
 				if(i<30)
 					mockProduct.setCategory("men");
@@ -63,11 +81,22 @@ public class EcommerceShopApplication {
 
 					productService.save(mockProduct);
 				mockPicture.setProduct(mockProduct);
+				mockPicture2.setProduct(mockProduct);
+				mockPicture3.setProduct(mockProduct);
+				mockPicture4.setProduct(mockProduct);
+				mockPicture5.setProduct(mockProduct);
+				mockPicture6.setProduct(mockProduct);
 				pictureRepository.save(mockPicture);
-
+				pictureRepository.save(mockPicture2);
+				pictureRepository.save(mockPicture3);
+				pictureRepository.save(mockPicture4);
+				pictureRepository.save(mockPicture5);
+				pictureRepository.save(mockPicture6);
 
 
 			}
+
+
 
 			Order order = new Order();
 			order.setDateCreated(LocalDate.now());

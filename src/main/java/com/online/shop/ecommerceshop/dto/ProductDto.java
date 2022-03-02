@@ -24,4 +24,5 @@ public class ProductDto {
     private String category;
     private String subcategory;
     private List<String> pictureUrls;
+    private Integer numberOfReviews;
 }
